@@ -1,0 +1,9 @@
+{
+  "name": "pleso-therapy",
+  "version": "0.1.0",
+  "description": "Find an online therapist on Pleso (pleso.me) that fits your concerns, language and preferences.",
+  "mcpServers": {
+    "pleso": { "httpUrl": "https://pleso-mcp--product-team-products.europe-west4.hosted.app/mcp" }
+  },
+  "contextFileName": "GEMINI.md"
+}

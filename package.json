@@ -1,0 +1,53 @@
+{
+  "name": "@pleso/mcp-server",
+  "version": "0.1.0",
+  "description": "Pleso Therapy MCP server: helps people find an online therapist that fits their concerns. Works with Claude, ChatGPT, Gemini, Perplexity and any MCP client.",
+  "main": "dist/http.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/http.js",
+    "start:stdio": "node dist/stdio.js",
+    "dev": "tsx watch src/http.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "inspect": "npx @modelcontextprotocol/inspector"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "therapy",
+    "mental-health",
+    "therapist",
+    "pleso"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.0"
+  },
+  "bin": {
+    "pleso-mcp": "dist/stdio.js"
+  },
+  "files": [
+    "dist",
+    "assets",
+    "README.md",
+    "LICENSE"
+  ],
+  "mcpName": "io.github.agus-pleso/pleso-mcp",
+  "engines": {
+    "node": ">=20"
+  },
+  "homepage": "https://pleso-mcp--product-team-products.europe-west4.hosted.app/docs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agus-pleso/pleso-mcp.git"
+  }
+}

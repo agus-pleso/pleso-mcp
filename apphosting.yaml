@@ -1,0 +1,17 @@
+# Firebase App Hosting config for the Pleso MCP server (project: product-team-products, backend: pleso-mcp).
+runConfig:
+  # One warm instance keeps the therapist catalog cached (a cold load of all regions takes ~20-30 s).
+  minInstances: 1
+  maxInstances: 4
+  cpu: 1
+  memoryMiB: 512
+  concurrency: 80
+
+env:
+  - variable: WARM_UP
+    value: "true"
+  - variable: CATALOG_TTL_SECONDS
+    value: "1800"
+  # ChatGPT app-directory domain verification token (set when submitting to OpenAI):
+  # - variable: OPENAI_APPS_CHALLENGE
+  #   value: "<token>"
