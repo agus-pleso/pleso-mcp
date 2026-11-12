@@ -73,8 +73,9 @@ There is no public directory or submission process; the built-in catalog appears
 
 ## 6. Other directories (quick wins)
 
-- **Smithery:** `npx @smithery/cli mcp publish "https://pleso-mcp--product-team-products.europe-west4.hosted.app/mcp" -n pleso/therapist-finder`, or use the smithery.ai dashboard.
-- **Glama:** glama.ai/mcp/servers → "Add MCP Server" with the GitHub URL.
+- **Smithery:** not available. It shut down submissions, accounts and its CLI on 2026-10-31 and is now a curated directory run by Arcade.
+- **mcp.so:** submitted free on 2026-11-12 as a GitHub issue: https://github.com/chatmcp/mcpso/issues/7197. A paid $39 option publishes immediately.
+- **Glama:** submitted 2026-11-12 under Add Server → "Hosted endpoint" (signed in with GitHub as agus-pleso). Glama emails after review, with instructions for health checks.
 - **mcp.so:** https://mcp.so/submit
 - **PulseMCP:** pulls from the official registry (step 3).
 - **npm** (for local and stdio users): `npm publish --access public`. Needs the `@pleso` org on npm. `mcpName` is already set in package.json.
