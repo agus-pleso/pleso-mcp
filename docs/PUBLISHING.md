@@ -27,6 +27,8 @@ Researched 2026-11-11 from official docs. These programs change often, so re-che
 
 ## 2. ChatGPT: app directory (OpenAI, now called "plugins")
 
+> **Ready-made package:** [`chatgpt/`](../chatgpt/README.md) has the manifest, 5+3 test cases, the demo script and the ZIP build. Follow that README; the notes below are background.
+
 - **Submit at:** https://platform.openai.com/plugins. Docs: https://developers.openai.com/plugins/deploy/submission and the guidelines at https://developers.openai.com/apps-sdk/app-submission-guidelines.
 - **Steps:**
   1. Submit from Pleso's business-verified OpenAI organization. Business verification is already done; the account details are in Linear RND-101.

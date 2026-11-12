@@ -2,6 +2,17 @@
   "apphosting": {
     "backendId": "pleso-mcp",
     "rootDir": "/",
-    "ignore": ["node_modules", ".git", "firebase-debug.log", "firebase-debug.*.log", "functions", "test", "scripts", "dist", ".claude"]
+    "ignore": [
+      "node_modules",
+      ".git",
+      "firebase-debug.log",
+      "firebase-debug.*.log",
+      "functions",
+      "test",
+      "scripts",
+      "dist",
+      ".claude",
+      "chatgpt"
+    ]
   }
 }

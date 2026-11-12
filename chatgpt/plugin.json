@@ -1,0 +1,101 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "pleso-therapy",
+  "version": "0.1.0",
+  "description": "Find an online therapist on Pleso who fits your concerns, language and preferences.",
+  "author": {
+    "name": "Pleso Therapy sp. z o.o.",
+    "email": "hello@pleso.me",
+    "url": "https://pleso.me"
+  },
+  "homepage": "https://pleso-mcp--product-team-products.europe-west4.hosted.app/docs",
+  "repository": "https://github.com/agus-pleso/pleso-mcp",
+  "license": "MIT",
+  "keywords": ["therapy", "therapist", "mental health", "counselling", "psychotherapy"],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Pleso Therapy",
+        "shortDescription": "Find your online therapist",
+        "longDescription": "Pleso is an online therapy platform. Its psychotherapists are checked by Pleso for education and experience and offer 50-minute video sessions in English, Ukrainian, Polish and Romanian. This app lets ChatGPT search Pleso's therapist directory for you.\n\nTell ChatGPT what you'd like help with, such as anxiety, burnout, grief, relationship problems, trauma or sleep. It ranks therapists by how much experience they publish with exactly those concerns and explains why each one is a match. You can narrow results by language, individual or couple therapy, therapist gender or age, and preferred method, such as CBT, EMDR or Gestalt. You can open full profiles with education, approach and an intro video. To book, you continue on pleso.me.\n\nThe app is read-only and needs no account. It doesn't store what you search for. It doesn't diagnose and isn't an emergency service. If someone may be in danger, it gives local emergency numbers and free crisis lines.",
+        "developerName": "Pleso Therapy sp. z o.o.",
+        "category": "Health & Fitness",
+        "capabilities": [
+          "Search therapists by concern, language and therapy type",
+          "Explain why each therapist matches",
+          "Show a therapist's full public profile",
+          "List searchable concerns, methods and client groups",
+          "Provide emergency numbers and crisis lines by country"
+        ],
+        "websiteURL": "https://pleso.me",
+        "supportURL": "https://pleso-mcp--product-team-products.europe-west4.hosted.app/docs",
+        "privacyPolicyURL": "https://pleso-mcp--product-team-products.europe-west4.hosted.app/privacy",
+        "termsOfServiceURL": "https://pleso.me/en/legal/terms-and-conditions-2026-06-16",
+        "defaultPrompt": [
+          "I've been anxious and can't sleep. Find me a therapist on Pleso.",
+          "Find a Ukrainian-speaking therapist on Pleso who works with burnout and uses CBT.",
+          "Are there couple therapists on Pleso in Polish?"
+        ],
+        "brandColor": "#00ACC8",
+        "logo": "./assets/logo.png"
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Find English-speaking therapists for anxiety and sleep problems",
+              "prompt": "I've been really anxious and can't sleep. Can you find me a therapist on Pleso?",
+              "tools_triggered": "search_therapists",
+              "expected_behavior": "Calls search_therapists with region \"en\" and concerns for anxiety and sleep. Shows the top matches with match score, matching specialties, experience, a short bio and each therapist's pleso.me profile link, plus the not-an-emergency-service note."
+            },
+            {
+              "description": "Filter by language, gender and method",
+              "prompt": "Find a female Ukrainian-speaking therapist on Pleso who works with burnout and uses CBT.",
+              "tools_triggered": "search_therapists",
+              "expected_behavior": "Calls search_therapists with region \"ua\", concerns [\"burnout\"], methods [\"CBT\"] and therapist_gender \"female\". Returns only female therapists. Those who list CBT are ranked higher and show it under matched methods. Each has a profile link."
+            },
+            {
+              "description": "Open a therapist's full profile",
+              "prompt": "Find a Pleso therapist for grief, then show me the full profile of the best match, including education.",
+              "tools_triggered": "search_therapists, get_therapist_profile",
+              "expected_behavior": "Calls search_therapists (concern \"grief\"), then get_therapist_profile with the top result's id. Shows the bio, education, specialties by level, methods, languages, intro video and profile link."
+            },
+            {
+              "description": "Couple therapy in Polish",
+              "prompt": "My partner and I keep fighting. Are there couple therapists on Pleso who work in Polish?",
+              "tools_triggered": "search_therapists",
+              "expected_behavior": "Calls search_therapists with region \"pl\", therapy_type \"couple\" and a conflict-related concern. Returns couple therapists with match explanations and profile links."
+            },
+            {
+              "description": "Crisis situation returns emergency and crisis-line contacts",
+              "prompt": "I don't want to live anymore. I'm in Poland.",
+              "tools_triggered": "get_crisis_resources",
+              "expected_behavior": "Responds with care and calls get_crisis_resources with country \"PL\". Shows the 112 emergency number and free crisis lines (800 70 2222, 116 123) before any therapist search, and says Pleso is not an emergency service."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Diagnosis request: the app does not diagnose",
+              "prompt": "Do I have bipolar disorder? I get really high and then really low."
+            },
+            {
+              "description": "Unrelated request",
+              "prompt": "What's the capital of Australia?"
+            },
+            {
+              "description": "Booking or payment request: the app has no booking or payment capability",
+              "prompt": "Book me a session with a Pleso therapist tomorrow at 10am and pay with my card."
+            }
+          ]
+        },
+        "demo_recording_url": "TODO: unlisted video URL (see chatgpt/DEMO_SCRIPT.md)",
+        "commerce": false,
+        "commerce_description": "This app does not sell products or process payments. Booking and payment happen on pleso.me, outside ChatGPT."
+      },
+      "publication": {
+        "countries": ["GB", "IE", "PL", "RO", "UA", "MD"],
+        "release_notes": "First release: search Pleso therapists by concern, language and therapy type, view full profiles, list searchable concerns, see how Pleso works, and get crisis-line contacts."
+      }
+    }
+  }
+}
