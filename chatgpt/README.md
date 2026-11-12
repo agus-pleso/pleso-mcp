@@ -10,7 +10,7 @@ Build the ZIP with `python -I scripts/build-chatgpt-zip.py`. It writes `dist/ple
 
 ## Steps (submit from Pleso's business-verified OpenAI organization)
 
-1. **Record the demo video** following `DEMO_SCRIPT.md`. Upload it unlisted, then put its URL in `review.demo_recording_url`.
+1. **Demo video:** we're first trying to submit without one (decided 2026-11-12). OpenAI's docs list `review.demo_recording_url` as required, so if the dashboard or the reviewers ask for it, record one following `DEMO_SCRIPT.md`, upload it unlisted, and add its URL to the dashboard (or to `review.demo_recording_url`).
 2. **Confirm or change three decisions in `plugin.json`:**
    - `category`: "Health & Fitness" is a guess. Pick the closest title from the dashboard's list.
    - `publication.countries`: currently GB, IE, PL, RO, UA, MD (Pleso's markets). Use `[]` for no restriction.

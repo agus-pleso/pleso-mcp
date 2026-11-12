@@ -88,7 +88,6 @@
             }
           ]
         },
-        "demo_recording_url": "TODO: unlisted video URL (see chatgpt/DEMO_SCRIPT.md)",
         "commerce": false,
         "commerce_description": "This app does not sell products or process payments. Booking and payment happen on pleso.me, outside ChatGPT."
       },

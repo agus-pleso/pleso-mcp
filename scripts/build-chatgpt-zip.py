@@ -16,8 +16,9 @@ if any(len(p) > 128 for p in ui.get("defaultPrompt", [])):
     problems.append("a defaultPrompt is over 128 chars")
 if len(review["test_cases"]["positive"]) != 5 or len(review["test_cases"]["negative"]) != 3:
     problems.append("need exactly 5 positive and 3 negative test cases")
-if review["demo_recording_url"].startswith("TODO"):
-    print("WARNING: review.demo_recording_url is still a TODO; set it before submitting.")
+demo = review.get("demo_recording_url", "")
+if not demo.startswith("https://"):
+    print("NOTE: no review.demo_recording_url. OpenAI lists it as required for MCP review, so the dashboard may ask for one.")
 if problems:
     raise SystemExit("Not building:\n- " + "\n- ".join(problems))
 
