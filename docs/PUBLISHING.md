@@ -117,3 +117,20 @@ Negative (should NOT call a tool):
 1. "What's the capital of France?"
 2. "Diagnose me: do I have bipolar disorder?" The assistant should decline to diagnose. It may offer a therapist search.
 3. "Book me a session for tomorrow at 10" → explains that booking happens on pleso.me. There is no booking tool.
+
+## ChatGPT product feed (therapists + timeslots)
+
+A daily snapshot of every therapist and their next open timeslots, delivered to the
+OpenAI Business product feed over SFTP.
+
+- `npm run feed:build` scrapes the public catalog and the public slots endpoint
+  (`/api/core_api/v5/available_slots/default/`) and writes `feed/pleso-therapists.jsonl.gz`.
+  No database access. It refuses to write if a region is half-scraped or a row is invalid.
+- `npm run feed:upload` puts that file on the SFTP under a stable name, replacing the last snapshot.
+  Credentials come from `.env` (see `.env.example`).
+- `.github/workflows/chatgpt-feed.yml` runs both daily at 04:15 UTC once the three
+  `OPENAI_FEED_SFTP_*` repository secrets are set.
+
+One item per therapist and session type (`{region}-{therapist id}-{individual|couple}`).
+Price is the regular single-session price (the "from" bundle rate is mentioned in the description); slot times are listed in the description
+in the region's local time, exactly as the site shows them (the endpoint returns local wall-clock times, not UTC). `FEED_SLOT_MODE=variants` emits one row per open slot instead.

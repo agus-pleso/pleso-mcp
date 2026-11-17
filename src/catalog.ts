@@ -67,6 +67,8 @@ export interface Therapist {
   educationType: string | null;
   city: string | null;
   photoUrl: string | null;
+  /** Second published photo (head-and-shoulders) when it differs from `photoUrl`. */
+  extraPhotoUrl?: string;
   videoUrl: string | null;
   therapyTypes: TherapyType[];
   /** issue.* / modality.* / group.* codes → numeric level as published (issues 1–5, others 0–3). */
@@ -88,6 +90,8 @@ export interface RegionCatalog {
   localLabels: Record<string, string>;
   /** Price strings exactly as Pleso publishes them for this region. */
   prices: Partial<Record<TherapyType, string>>;
+  /** Regular single-session price text where Pleso publishes one that differs from `prices` (the bundle rate). */
+  regularPrices?: Partial<Record<TherapyType, string>>;
 }
 
 export interface CatalogSource {
@@ -166,6 +170,9 @@ export function parseTherapist(raw: any, region: Region, now = new Date()): Ther
     educationType: str(raw?.education_type),
     city: str(raw?.city),
     photoUrl: str(raw?.half_length_photo) ?? str(raw?.bust_photo),
+    ...(str(raw?.half_length_photo) && str(raw?.bust_photo) && str(raw?.bust_photo) !== str(raw?.half_length_photo)
+      ? { extraPhotoUrl: str(raw?.bust_photo) as string }
+      : {}),
     videoUrl: str(raw?.video_introduction_url),
     therapyTypes,
     scores,
@@ -198,6 +205,8 @@ export interface ParsedPage {
   configs: Record<string, any>;
   localLabels: Record<string, string>;
   priceStrings: Record<string, string>;
+  /** Single-session price from the page's footnote, e.g. "£79" (English site only). */
+  footnotePrice?: string;
 }
 
 export function parseCatalogPage(html: string, region: Region, now = new Date()): ParsedPage {
@@ -217,7 +226,9 @@ export function parseCatalogPage(html: string, region: Region, now = new Date())
   const therapists = pp.therapistsData
     .map((t: any) => parseTherapist(t, region, now))
     .filter((t: Therapist | null): t is Therapist => t !== null);
+  const footnote = html.match(/\*\s*Single session\s*[-–—:]\s*([^,<"\\]{0,20}\d[^,<"\\]{0,10})/);
   return {
+    ...(footnote?.[1] ? { footnotePrice: footnote[1].trim() } : {}),
     therapists,
     totalCount: Number(pp.therapistsCount) || therapists.length,
     pageSize: pp.therapistsData.length || 20,
@@ -248,6 +259,7 @@ export function buildCatalog(
   }
   const facets: Partial<Record<TherapyType, Facets>> = {};
   const prices: Partial<Record<TherapyType, string>> = {};
+  const regularPrices: Partial<Record<TherapyType, string>> = {};
   for (const type of Object.keys(SERVICE_CONFIG_KEY) as TherapyType[]) {
     const cfg = first.configs[SERVICE_CONFIG_KEY[type]];
     if (!cfg) continue;
@@ -258,8 +270,12 @@ export function buildCatalog(
     };
     const price = first.priceStrings[`${SERVICE_CONFIG_KEY[type]}_price_min`];
     if (price) prices[type] = price;
+    // "Price shown for bundles. Regular price - 249 zł/session": keep it only when it names an amount.
+    const tooltip = first.priceStrings[`${SERVICE_CONFIG_KEY[type]}_price_tooltip`];
+    const regular = tooltip && /\d/.test(tooltip) ? tooltip : type === 'individual' ? first.footnotePrice : undefined;
+    if (regular) regularPrices[type] = regular;
   }
-  return { region, fetchedAt: now.toISOString(), therapists, facets, labels, localLabels, prices };
+  return { region, fetchedAt: now.toISOString(), therapists, facets, labels, localLabels, prices, regularPrices };
 }
 
 // ---------------------------------------------------------------------------

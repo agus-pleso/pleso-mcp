@@ -10,7 +10,10 @@
     "dev": "tsx watch src/http.ts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "inspect": "npx @modelcontextprotocol/inspector"
+    "inspect": "npx @modelcontextprotocol/inspector",
+    "feed:build": "tsx scripts/build-chatgpt-feed.ts",
+    "feed:upload": "tsx scripts/upload-chatgpt-feed.ts",
+    "feed": "npm run feed:build && npm run feed:upload"
   },
   "keywords": [
     "mcp",
@@ -28,6 +31,8 @@
   },
   "devDependencies": {
     "@types/node": "^26.6.6",
+    "@types/ssh2-sftp-client": "^9.0.6",
+    "ssh2-sftp-client": "^12.1.1",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
     "vitest": "^5.1.0"

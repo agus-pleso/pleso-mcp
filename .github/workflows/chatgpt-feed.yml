@@ -1,0 +1,42 @@
+name: ChatGPT product feed
+
+# Scrapes pleso.me's public catalog + open timeslots once a day and replaces the
+# snapshot on OpenAI's product feed SFTP. Needs these repository secrets:
+#   OPENAI_FEED_SFTP_HOST, OPENAI_FEED_SFTP_USER, OPENAI_FEED_SFTP_PASSWORD
+on:
+  schedule:
+    - cron: '15 4 * * *' # 04:15 UTC, before the European morning
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: chatgpt-feed
+  cancel-in-progress: false
+
+jobs:
+  feed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run feed:build
+      - run: npm run feed:upload
+        env:
+          OPENAI_FEED_SFTP_HOST: ${{ secrets.OPENAI_FEED_SFTP_HOST }}
+          OPENAI_FEED_SFTP_PORT: '443'
+          OPENAI_FEED_SFTP_USER: ${{ secrets.OPENAI_FEED_SFTP_USER }}
+          OPENAI_FEED_SFTP_PASSWORD: ${{ secrets.OPENAI_FEED_SFTP_PASSWORD }}
+          OPENAI_FEED_SFTP_PATH: /
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pleso-therapists-feed
+          path: feed/pleso-therapists.jsonl.gz
+          retention-days: 7
